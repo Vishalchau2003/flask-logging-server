@@ -1,6 +1,7 @@
 from flask import Flask, request, jsonify
 import requests
 from datetime import datetime
+import sys  # import sys to flush stdout
 
 app = Flask(__name__)
 
@@ -23,6 +24,9 @@ def index():
 
 @app.route('/log', methods=['POST'])
 def log_visitor():
+    print(">>> /log route triggered <<<")
+    sys.stdout.flush()
+
     visitor_ip = get_client_ip()
     user_agent = request.headers.get('User-Agent')
     referrer = request.referrer
@@ -48,6 +52,7 @@ def log_visitor():
     print(f"Query Params: {query_params}")
     print(f"GeoIP Info: {geo_info}")
     print("------------------------------")
+    sys.stdout.flush()
 
     return jsonify({
         "message": "Visitor info logged with consent.",
@@ -61,3 +66,4 @@ def log_visitor():
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
+
